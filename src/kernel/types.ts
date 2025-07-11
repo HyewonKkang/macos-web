@@ -21,7 +21,20 @@ export type ProcessState = 'ready' | 'running' | 'waiting' | 'terminated';
 
 export interface Process {
   pid: number;
+  name: string;
   state: ProcessState;
   startTime: number;
   appId: string;
+}
+
+export type ProcessEventType =
+  | 'process:started'
+  | 'process:created'
+  | 'process:waiting'
+  | 'process:terminated';
+
+export interface IPCMessage {
+  channel: string;
+  topic: string;
+  data: any;
 }

@@ -1,10 +1,15 @@
-import { KernelEvent, KernelState, KernelSubSystem } from './types';
+import EventEmitter from 'eventemitter3';
+import { IPCBus } from './ipcBus';
 import { Launchd } from './launchd';
 import { ProcessManager } from './processManager';
-import { IPCBus } from './ipcBus';
-import EventEmitter from 'eventemitter3';
+import {
+  KernelEvent,
+  KernelEventType,
+  KernelState,
+  KernelSubSystem,
+} from './types';
 
-export class Kernel extends EventEmitter {
+export class Kernel extends EventEmitter<KernelEventType, any> {
   private static instance: Kernel | null = null;
   private state: KernelState = 'starting';
   private startTime: number = 0;

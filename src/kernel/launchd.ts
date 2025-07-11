@@ -3,9 +3,9 @@ import { KernelSubSystem } from './types';
 export class Launchd implements KernelSubSystem {
   name = 'launchd';
 
-  async init(): Promise<void> {}
+  public async init(): Promise<void> {}
 
-  async shutdown(): Promise<void> {}
+  public async shutdown(): Promise<void> {}
 
-  async boot(): Promise<void> {}
+  public async boot(): Promise<void> {}
 }
