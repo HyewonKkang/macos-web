@@ -1,5 +1,5 @@
 import EventEmitter from 'eventemitter3';
-import { KernelSubSystem, Process, ProcessEventType } from './types';
+import { KernelSubSystem, Process, ProcessEventType } from '@kernel';
 
 export class ProcessManager
   extends EventEmitter<ProcessEventType, any>

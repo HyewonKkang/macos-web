@@ -1,5 +1,5 @@
 import EventEmitter from 'eventemitter3';
-import { Kernel } from 'src/kernel';
+import { Kernel } from '@kernel';
 
 export class Desktop extends EventEmitter {
   private static instance: Desktop | null = null;

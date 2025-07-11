@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import { Kernel } from './kernel';
-import { WindowManager } from './system/windowManager';
-import { Desktop } from './system/desktop';
-import { Dock } from './system/dock';
+import { Kernel } from '@kernel';
+import { WindowManager, Dock, Desktop } from '@system';
 
 export default function DesktopApp() {
   const [isReady, setIsReady] = useState(false);

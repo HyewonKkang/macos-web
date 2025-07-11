@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import DesktopApp from './DesktopApp';
-import { Kernel } from './kernel';
+import { Kernel } from '@kernel';
 
 const kernel = Kernel.getInstance();
 

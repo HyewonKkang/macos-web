@@ -1,5 +1,5 @@
 import EventEmitter from 'eventemitter3';
-import { Kernel } from 'src/kernel';
+import { Kernel } from '@kernel';
 
 export interface Window {
   id: number;

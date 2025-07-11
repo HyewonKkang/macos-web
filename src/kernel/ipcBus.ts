@@ -1,5 +1,5 @@
 import EventEmitter from 'eventemitter3';
-import { IPCMessage, KernelSubSystem } from './types';
+import { IPCMessage, KernelSubSystem } from '@kernel';
 
 export class IPCBus extends EventEmitter implements KernelSubSystem {
   name = 'IPCBus';

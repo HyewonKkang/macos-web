@@ -1,6 +1,6 @@
 import EventEmitter from 'eventemitter3';
-import { Desktop } from './desktop';
-import { Kernel } from 'src/kernel';
+import { Desktop } from '@system';
+import { Kernel } from '@kernel';
 
 export interface DockItem {
   id: string;

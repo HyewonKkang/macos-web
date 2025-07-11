@@ -1,5 +1,5 @@
 import EventEmitter from 'eventemitter3';
-import { KernelSubSystem } from './types';
+import { KernelSubSystem } from '@kernel';
 
 type LaunchdEvents = {
   'launchd:booted': void;
