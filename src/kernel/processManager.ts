@@ -52,6 +52,7 @@ export class ProcessManager
       appId,
       state: 'ready',
       startTime: Date.now(),
+      windows: [],
     };
 
     this.processes.set(pid, process);
@@ -85,7 +86,48 @@ export class ProcessManager
     this.processes.delete(pid);
   }
 
+  /**
+   * 윈도우를 프로세스에 연결
+   */
+  public attachWindow(pid: number, windowId: number): boolean {
+    const process = this.processes.get(pid);
+    if (!process) return false;
+
+    if (!process.windows) {
+      process.windows = [];
+    }
+
+    if (!process.windows.includes(windowId)) {
+      process.windows.push(windowId);
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * 윈도우를 프로세스에서 분리
+   */
+  public detachWindow(pid: number, windowId: number): boolean {
+    const process = this.processes.get(pid);
+    if (!process || !process.windows) return false;
+
+    const index = process.windows.indexOf(windowId);
+    if (index >= 0) {
+      process.windows.splice(index, 1);
+      return true;
+    }
+
+    return false;
+  }
+
   private clear() {
     this.processes.clear();
+  }
+
+  public getProcessesByAppId(appId: string): Process[] {
+    return Array.from(this.processes.values()).filter(
+      (process) => process.appId === appId,
+    );
   }
 }

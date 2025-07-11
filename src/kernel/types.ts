@@ -25,6 +25,7 @@ export interface Process {
   state: ProcessState;
   startTime: number;
   appId: string;
+  windows?: number[]; // 프로세스 당 여러 개 윈도우 연결 가능
 }
 
 export type ProcessEventType =
