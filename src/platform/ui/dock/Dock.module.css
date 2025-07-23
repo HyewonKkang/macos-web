@@ -1,5 +1,5 @@
 .dockBar {
-  position: fixed; 
+  position: fixed;
   bottom: 14px;
   transform: translateX(-50%);
   display: flex;
@@ -8,8 +8,9 @@
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.18);
   backdrop-filter: blur(25px) saturate(160%);
-  box-shadow: 0 3px 20px rgba(0, 0, 0, 0.12), 
-              inset 0 0 0 0.5px rgba(255, 255, 255, 0.4);
+  box-shadow:
+    0 3px 20px rgba(0, 0, 0, 0.12),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.4);
   transform-origin: bottom;
   transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
   z-index: 1000;
@@ -33,6 +34,7 @@
   transition: all 0.25s cubic-bezier(0.2, 0.85, 0.4, 1);
   z-index: 1;
   user-select: none;
+  margin-bottom: 6px;
 }
 
 .dockItem img {
@@ -40,8 +42,9 @@
   height: 58px;
   border-radius: 12px;
   transform-origin: bottom;
-  transition: transform 0.25s cubic-bezier(0.2, 0.85, 0.4, 1), 
-              filter 0.2s ease;
+  transition:
+    transform 0.25s cubic-bezier(0.2, 0.85, 0.4, 1),
+    filter 0.2s ease;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.08));
   will-change: transform;
   object-fit: cover;
@@ -57,17 +60,19 @@
   bottom: -6px;
   left: 50%;
   transform: translateX(-50%);
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(72, 72, 72, 0.8);
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 
 .dockItemTooltip {
   position: absolute;
-  top: -46px;                    
+  top: -46px;
   padding: 6px 14px;
   background: rgba(42, 42, 42, 0.75);
   color: #fff;
@@ -80,8 +85,8 @@
   transition: all 0.2s cubic-bezier(0.2, 0.85, 0.4, 1);
   backdrop-filter: blur(12px);
   box-shadow:
-      0 3px 12px rgba(0,0,0,0.20),
-      inset 0 0 0 0.5px rgba(255,255,255,0.20);
+    0 3px 12px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.2);
   pointer-events: none;
 }
 
@@ -91,7 +96,7 @@
   left: 50%;
   transform: translateX(-50%) translateY(10px);
   padding: 6px 14px;
-  background: rgba(55, 55, 55, 0.7); 
+  background: rgba(55, 55, 55, 0.7);
   color: white;
   font-size: 12px;
   font-weight: 500;
@@ -100,8 +105,9 @@
   opacity: 0;
   transition: all 0.2s cubic-bezier(0.2, 0.85, 0.4, 1);
   backdrop-filter: blur(20px);
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15),
-              inset 0 0 0 0.5px rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.15),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.2);
   pointer-events: none;
 }
 

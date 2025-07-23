@@ -78,12 +78,12 @@ export class ProcessManager
       return;
     }
 
+    this.processes.delete(pid);
     this.emit('process:terminated', {
       pid,
       name: process.name,
       appId: process.appId,
     });
-    this.processes.delete(pid);
   }
 
   /**
@@ -115,6 +115,7 @@ export class ProcessManager
     const index = process.windows.indexOf(windowId);
     if (index >= 0) {
       process.windows.splice(index, 1);
+      this.killProcess(pid);
       return true;
     }
 

@@ -61,7 +61,7 @@ export class Dock extends EventEmitter {
       return;
     }
 
-    this.items.push(item);
+    this.items = [...this.items, item];
   }
 
   /**
@@ -69,44 +69,69 @@ export class Dock extends EventEmitter {
    * Dock 아이템 클릭 (앱 실행)
    */
   public clickItem(id: string): void {
-    const item = this.items.find((i) => i.id === id);
-    if (!item) return;
+    const itemIndex = this.items.findIndex((i) => i.id === id);
+    if (itemIndex < 0) return;
+
+    const item = this.items[itemIndex];
 
     if (item.isRunning) {
       // 앱이 실행 중이면 윈도우 표시
       this.kernel.ipc.publish('app', 'focus', { appId: item.appId });
     } else {
       this.desktop.launchApp(item.appId);
+
+      this.items = [
+        ...this.items.slice(0, itemIndex),
+        {
+          ...item,
+          isRunning: true,
+          windowCount: item.windowCount + 1,
+        },
+        ...this.items.slice(itemIndex + 1),
+      ];
     }
 
-    this.emit('dockitem:clicked', item);
+    this.emit('dockitem:clicked', this.items[itemIndex]);
   }
 
   private handleProcessCreated(event: any): void {
     const { appId } = event;
 
-    const item = this.items.find((i) => i.appId === appId);
-    if (item) {
-      item.isRunning = true;
-      item.windowCount++;
+    const itemIndex = this.items.findIndex((i) => i.appId === appId);
+    if (itemIndex >= 0) {
+      this.items = [
+        ...this.items.slice(0, itemIndex),
+        {
+          ...this.items[itemIndex],
+          isRunning: true,
+          windowCount: this.items[itemIndex].windowCount + 1,
+        },
+        ...this.items.slice(itemIndex + 1),
+      ];
 
-      this.emit('dockitem:updated', item);
+      this.emit('dockitem:updated', this.items[itemIndex]);
     }
   }
 
-  private handleProcessTerminated(event: any): void {
-    const { appId } = event;
+  private handleProcessTerminated(data: any): void {
+    const { appId } = data;
 
-    // 실행 중인 같은 앱의 프로세스 확인
     const runningProcesses =
       this.kernel.processManager.getProcessesByAppId(appId);
+    const itemIndex = this.items.findIndex((i) => i.appId === appId);
 
-    const item = this.items.find((i) => i.appId === appId);
-    if (item) {
-      item.isRunning = runningProcesses.length > 0;
-      item.windowCount = runningProcesses.length;
+    if (itemIndex >= 0) {
+      this.items = [
+        ...this.items.slice(0, itemIndex),
+        {
+          ...this.items[itemIndex],
+          isRunning: runningProcesses.length > 0,
+          windowCount: runningProcesses.length,
+        },
+        ...this.items.slice(itemIndex + 1),
+      ];
 
-      this.emit('dockitem:updated', item);
+      this.emit('dockitem:updated', this.items[itemIndex]);
     }
   }
 
