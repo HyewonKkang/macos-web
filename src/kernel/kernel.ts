@@ -72,7 +72,7 @@ export class Kernel extends EventEmitter<KernelEventType, any> {
         } as KernelEvent);
         const bootTime = Date.now() - this.startTime;
         console.log(`🚀 Kernel booted in ${bootTime}ms`);
-      }, 3000);
+      }, 100); // TODO: 3000ms로 수정
     } catch (error) {
       this.state = 'error';
       this.emit('kernel:error', {

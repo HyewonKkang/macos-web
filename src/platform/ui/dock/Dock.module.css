@@ -1,0 +1,137 @@
+.dockBar {
+  position: fixed; 
+  bottom: 14px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-end;
+  padding: 7px 13px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(25px) saturate(160%);
+  box-shadow: 0 3px 20px rgba(0, 0, 0, 0.12), 
+              inset 0 0 0 0.5px rgba(255, 255, 255, 0.4);
+  transform-origin: bottom;
+  transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
+  z-index: 1000;
+  perspective: 1200px;
+  transform: rotateX(8deg) translateY(-2px);
+}
+
+.dockBar:hover {
+  transform: rotateX(0deg) translateY(-4px);
+}
+
+.dockItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  margin: 0 3px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.2, 0.85, 0.4, 1);
+  z-index: 1;
+  user-select: none;
+}
+
+.dockItem img {
+  width: 58px;
+  height: 58px;
+  border-radius: 12px;
+  transform-origin: bottom;
+  transition: transform 0.25s cubic-bezier(0.2, 0.85, 0.4, 1), 
+              filter 0.2s ease;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.08));
+  will-change: transform;
+  object-fit: cover;
+}
+
+.dockItem:hover img {
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.15));
+  transform: translateY(-8px) scale(1.1);
+}
+
+.indicator {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.dockItemTooltip {
+  position: absolute;
+  top: -46px;                    
+  padding: 6px 14px;
+  background: rgba(42, 42, 42, 0.75);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.2s cubic-bezier(0.2, 0.85, 0.4, 1);
+  backdrop-filter: blur(12px);
+  box-shadow:
+      0 3px 12px rgba(0,0,0,0.20),
+      inset 0 0 0 0.5px rgba(255,255,255,0.20);
+  pointer-events: none;
+}
+
+.dockItemTooltip {
+  position: absolute;
+  top: -42px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  padding: 6px 14px;
+  background: rgba(55, 55, 55, 0.7); 
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: all 0.2s cubic-bezier(0.2, 0.85, 0.4, 1);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15),
+              inset 0 0 0 0.5px rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+}
+
+.dockItemTooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent; /* 크기 축소 */
+  border-right: 5px solid transparent; /* 크기 축소 */
+  border-top: 5px solid rgba(55, 55, 55, 0.7); /* 툴팁과 같은 연한 색상 */
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.05)); /* 미세한 그림자 추가 */
+}
+
+.dockItem:hover .dockItemTooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.dockItem:active img {
+  transform: scale(0.85);
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.dockItem:hover ~ .dockItem img {
+  transform: translateX(4px);
+}
+
+.dockItem:not(:hover) img {
+  transition-duration: 0.35s;
+}

@@ -2,7 +2,7 @@ import EventEmitter from 'eventemitter3';
 import { Desktop } from '@system';
 import { Kernel } from '@kernel';
 
-export interface DockItem {
+export interface DockItemType {
   id: string;
   appId: string;
   name: string;
@@ -16,7 +16,7 @@ export class Dock extends EventEmitter {
   private kernel: Kernel;
   private desktop: Desktop;
 
-  private items: DockItem[] = [];
+  private items: DockItemType[] = [];
 
   constructor() {
     super();
@@ -44,17 +44,58 @@ export class Dock extends EventEmitter {
   }
 
   private initializeDefaultItems(): void {
+    // Finder
     this.addItem({
       id: 'finder',
       appId: 'system.finder',
       name: 'Finder',
-      icon: 'finder-icon.png',
+      icon: 'icons/finder.png',
+      isRunning: false,
+      windowCount: 0,
+    });
+
+    // Safari
+    this.addItem({
+      id: 'safari',
+      appId: 'com.apple.Safari',
+      name: 'Safari',
+      icon: 'icons/safari.png',
+      isRunning: false,
+      windowCount: 0,
+    });
+
+    // TextEdit
+    this.addItem({
+      id: 'textedit',
+      appId: 'com.apple.TextEdit',
+      name: 'TextEdit',
+      icon: 'icons/textedit.png',
+      isRunning: false,
+      windowCount: 0,
+    });
+
+    // Calendar
+    this.addItem({
+      id: 'calendar',
+      appId: 'com.apple.Calendar',
+      name: 'Calendar',
+      icon: 'icons/calendar.png',
+      isRunning: false,
+      windowCount: 0,
+    });
+
+    // Calculator
+    this.addItem({
+      id: 'calculator',
+      appId: 'com.apple.Calculator',
+      name: 'Calculator',
+      icon: 'icons/calculator.png',
       isRunning: false,
       windowCount: 0,
     });
   }
 
-  public addItem(item: DockItem): void {
+  public addItem(item: DockItemType): void {
     if (this.items.some((i) => i.appId === item.appId)) {
       return;
     }
@@ -106,5 +147,9 @@ export class Dock extends EventEmitter {
 
       this.emit('dockitem:updated', item);
     }
+  }
+
+  public getItems(): DockItemType[] {
+    return this.items;
   }
 }

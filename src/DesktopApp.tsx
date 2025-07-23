@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import './App.css';
 import { Kernel } from '@kernel';
 import { WindowManager, Dock, Desktop } from '@system';
+import DockComponent from './platform/ui/dock';
+import styles from './App.module.css';
+import MenuBar from './platform/ui/menubar';
 
 export default function DesktopApp() {
   const [isReady, setIsReady] = useState(false);
@@ -28,5 +30,10 @@ export default function DesktopApp() {
     return <div>Booting...</div>;
   }
 
-  return <div>Desktop</div>;
+  return (
+    <main className={styles.app}>
+      <MenuBar />
+      <DockComponent />
+    </main>
+  );
 }

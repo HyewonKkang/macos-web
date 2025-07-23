@@ -1,18 +1,12 @@
 import { FC } from 'react';
+import { WindowDefaults } from 'src/types/window';
 
 export interface AppMetadata {
   id: string;
   name: string;
   icon: string;
   component: FC;
-  windowDefaults: {
-    width: number;
-    height: number;
-    resizable?: boolean;
-    minWidth?: number;
-    minHeight?: number;
-    title?: string;
-  };
+  windowDefaults: WindowDefaults;
   dock: {
     show: boolean;
     position?: number;
