@@ -4,6 +4,7 @@ import { WindowManager, Dock, Desktop } from '@system';
 import DockComponent from './platform/ui/dock';
 import styles from './App.module.css';
 import MenuBar from './platform/ui/menubar';
+import AppsRenderer from './platform/ui/appsRenderer';
 
 export default function DesktopApp() {
   const [isReady, setIsReady] = useState(false);
@@ -33,6 +34,7 @@ export default function DesktopApp() {
   return (
     <main className={styles.app}>
       <MenuBar />
+      <AppsRenderer />
       <DockComponent />
     </main>
   );

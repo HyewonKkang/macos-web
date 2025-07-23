@@ -1,6 +1,7 @@
 import EventEmitter from 'eventemitter3';
 import { Desktop } from '@system';
 import { Kernel } from '@kernel';
+import { appRegistry, AppMetadata } from '../apps/registry';
 
 export interface DockItemType {
   id: string;
@@ -44,54 +45,14 @@ export class Dock extends EventEmitter {
   }
 
   private initializeDefaultItems(): void {
-    // Finder
-    this.addItem({
-      id: 'finder',
-      appId: 'system.finder',
-      name: 'Finder',
-      icon: 'icons/finder.png',
-      isRunning: false,
-      windowCount: 0,
-    });
+    // appRegistry에서 dock.show가 true인 앱들을 가져와서 dock item으로 추가
+    const dockApps = Object.values(appRegistry)
+      .filter((app) => app.dock.show)
+      .sort((a, b) => (a.dock.position || 0) - (b.dock.position || 0));
 
-    // Safari
-    this.addItem({
-      id: 'safari',
-      appId: 'com.apple.Safari',
-      name: 'Safari',
-      icon: 'icons/safari.png',
-      isRunning: false,
-      windowCount: 0,
-    });
-
-    // TextEdit
-    this.addItem({
-      id: 'textedit',
-      appId: 'com.apple.TextEdit',
-      name: 'TextEdit',
-      icon: 'icons/textedit.png',
-      isRunning: false,
-      windowCount: 0,
-    });
-
-    // Calendar
-    this.addItem({
-      id: 'calendar',
-      appId: 'com.apple.Calendar',
-      name: 'Calendar',
-      icon: 'icons/calendar.png',
-      isRunning: false,
-      windowCount: 0,
-    });
-
-    // Calculator
-    this.addItem({
-      id: 'calculator',
-      appId: 'com.apple.Calculator',
-      name: 'Calculator',
-      icon: 'icons/calculator.png',
-      isRunning: false,
-      windowCount: 0,
+    dockApps.forEach((app) => {
+      const dockItem = createDockItemFromApp(app);
+      this.addItem(dockItem);
     });
   }
 
@@ -152,4 +113,15 @@ export class Dock extends EventEmitter {
   public getItems(): DockItemType[] {
     return this.items;
   }
+}
+
+function createDockItemFromApp(appMetadata: AppMetadata): DockItemType {
+  return {
+    id: appMetadata.id, // dock item id는 appId와 동일하게
+    appId: appMetadata.id,
+    name: appMetadata.name,
+    icon: appMetadata.icon,
+    isRunning: false,
+    windowCount: 0,
+  };
 }

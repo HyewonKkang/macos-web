@@ -217,4 +217,8 @@ export class WindowManager extends EventEmitter {
       ? this.windows.get(this.activeWindowId) || null
       : null;
   }
+
+  public getWindows(): Window[] {
+    return Array.from(this.windows.values());
+  }
 }
