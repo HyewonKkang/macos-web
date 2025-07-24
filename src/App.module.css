@@ -1,35 +1,61 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-  
-html, body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
-  
+
 #root {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .app {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    padding-bottom: 20px;
-    overflow: hidden;
-    z-index: 100;
-    background-image: url('/desktop/wallpaper.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: rgba(0, 0, 0, 0.1); /* 미세한 어두운 오버레이 */
-    background-blend-mode: overlay;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 24px 1fr 80px; /* MenuBar(24px) + WindowsRenderer(나머지) + Dock영역(80px) */
+  grid-template-areas:
+    'menubar'
+    'windows'
+    'dock';
+  overflow: hidden;
+  background-image: url('/desktop/wallpaper.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: rgba(0, 0, 0, 0.1); /* 미세한 어두운 오버레이 */
+  background-blend-mode: overlay;
+}
+
+/* MenuBar 영역 */
+.app > :nth-child(1) {
+  grid-area: menubar;
+  z-index: 9999;
+}
+
+/* WindowsRenderer 영역 */
+.app > :nth-child(2) {
+  grid-area: windows;
+  position: relative;
+  z-index: 100;
+}
+
+/* Dock 영역 */
+.app > :nth-child(3) {
+  grid-area: dock;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 4px;
+  z-index: 1000;
 }

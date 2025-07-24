@@ -7,10 +7,12 @@ export default function Dock() {
   const items = useDock();
 
   return (
-    <nav className={styles.dockBar}>
-      {items.map((item: DockItemType) => (
-        <DockItem key={item.id} item={item} />
-      ))}
-    </nav>
+    <div className={styles.dock}>
+      <nav className={styles.dockBar}>
+        {items.map((item: DockItemType) => (
+          <DockItem key={item.id} item={item} />
+        ))}
+      </nav>
+    </div>
   );
 }

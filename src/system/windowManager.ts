@@ -19,6 +19,7 @@ export class WindowManager extends EventEmitter {
   private kernel: Kernel;
 
   private windows: Map<number, Window> = new Map();
+  private windowsArray: Window[] = [];
   private nextWindowId: number = 1;
   private maxZIndex: number = 0;
   private activeWindowId: number | null = null;
@@ -66,6 +67,7 @@ export class WindowManager extends EventEmitter {
     };
 
     this.windows.set(windowId, window);
+    this.syncWindowsArray();
 
     this.kernel.processManager.attachWindow(pid, windowId);
 
@@ -86,6 +88,7 @@ export class WindowManager extends EventEmitter {
     if (!window) return;
 
     this.windows.delete(windowId);
+    this.syncWindowsArray();
 
     this.kernel.processManager.detachWindow(window.pid, windowId);
 
@@ -121,12 +124,20 @@ export class WindowManager extends EventEmitter {
 
     // 최상위로 가져오기
     this.maxZIndex++;
-    window.zIndex = this.maxZIndex;
+
+    // 새로운 window 객체 생성
+    const updatedWindow: Window = {
+      ...window,
+      zIndex: this.maxZIndex,
+    };
+
+    this.windows.set(windowId, updatedWindow);
+    this.syncWindowsArray();
 
     // 포커스 상태 업데이트
     this.activeWindowId = windowId;
 
-    this.emit('window:focused', window);
+    this.emit('window:focused', updatedWindow);
   }
 
   /**
@@ -136,10 +147,17 @@ export class WindowManager extends EventEmitter {
     const window = this.windows.get(windowId);
     if (!window) return;
 
-    window.isMaximized = !window.isMaximized;
-    window.isMaximized = true;
+    // 새로운 window 객체 생성
+    const updatedWindow: Window = {
+      ...window,
+      isMaximized: true,
+      isMinimized: false,
+    };
 
-    this.emit('window:maximized', window);
+    this.windows.set(windowId, updatedWindow);
+    this.syncWindowsArray();
+
+    this.emit('window:maximized', updatedWindow);
     this.focusWindow(windowId);
   }
 
@@ -150,8 +168,15 @@ export class WindowManager extends EventEmitter {
     const window = this.windows.get(windowId);
     if (!window) return;
 
-    window.isMinimized = true;
-    window.isMaximized = false;
+    // 새로운 window 객체 생성
+    const updatedWindow: Window = {
+      ...window,
+      isMinimized: true,
+      isMaximized: false,
+    };
+
+    this.windows.set(windowId, updatedWindow);
+    this.syncWindowsArray();
 
     // 활성화 상태였다면 다음으로 z-index가 높은 윈도우 활성화
     if (this.activeWindowId === windowId) {
@@ -164,7 +189,7 @@ export class WindowManager extends EventEmitter {
       }
     }
 
-    this.emit('window:minimized', window);
+    this.emit('window:minimized', updatedWindow);
   }
 
   /**
@@ -174,10 +199,17 @@ export class WindowManager extends EventEmitter {
     const window = this.windows.get(windowId);
     if (!window) return;
 
-    window.isMinimized = false;
-    window.isMaximized = false;
+    // 새로운 window 객체 생성
+    const updatedWindow: Window = {
+      ...window,
+      isMinimized: false,
+      isMaximized: false,
+    };
 
-    this.emit('window:restored', window);
+    this.windows.set(windowId, updatedWindow);
+    this.syncWindowsArray();
+
+    this.emit('window:restored', updatedWindow);
 
     this.focusWindow(windowId);
   }
@@ -192,9 +224,16 @@ export class WindowManager extends EventEmitter {
     const window = this.windows.get(windowId);
     if (!window || window.isMinimized || window.isMaximized) return;
 
-    window.position = position;
+    // 새로운 window 객체 생성
+    const updatedWindow: Window = {
+      ...window,
+      position,
+    };
 
-    this.emit('window:moved', window);
+    this.windows.set(windowId, updatedWindow);
+    this.syncWindowsArray();
+
+    this.emit('window:moved', updatedWindow);
   }
 
   /**
@@ -207,9 +246,16 @@ export class WindowManager extends EventEmitter {
     const window = this.windows.get(windowId);
     if (!window || window.isMinimized || window.isMaximized) return;
 
-    window.size = size;
+    // 새로운 window 객체 생성
+    const updatedWindow: Window = {
+      ...window,
+      size,
+    };
 
-    this.emit('window:resized', window);
+    this.windows.set(windowId, updatedWindow);
+    this.syncWindowsArray();
+
+    this.emit('window:resized', updatedWindow);
   }
 
   public getActiveWindow(): Window | null {
@@ -218,7 +264,11 @@ export class WindowManager extends EventEmitter {
       : null;
   }
 
+  private syncWindowsArray(): void {
+    this.windowsArray = Array.from(this.windows.values());
+  }
+
   public getWindows(): Window[] {
-    return Array.from(this.windows.values());
+    return this.windowsArray;
   }
 }

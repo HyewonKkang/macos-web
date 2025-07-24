@@ -8,17 +8,72 @@
   user-select: none;
   min-width: 200px;
   min-height: 120px;
-  transition: box-shadow 0.2s ease;
-  backdrop-filter: blur(5px);
+
+  transition:
+    top 0.35s ease,
+    left 0.35s ease,
+    width 0.35s ease,
+    height 0.35s ease,
+    border-radius 0.35s ease,
+    transform 0.25s ease,
+    opacity 0.25s ease,
+    box-shadow 0.2s ease;
 }
 
 .window.active {
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
   z-index: 100;
 }
-
 .window.inactive {
   opacity: 0.95;
+}
+
+:root {
+  --menu-bar-height: 24px;
+  --dock-height: 84px;
+}
+
+.window.maximized {
+  position: fixed;
+  top: var(--menu-bar-height);
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - var(--menu-bar-height) - var(--dock-height));
+  border-radius: 0;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  z-index: 200; /* WindowsRenderer보다 높은 z-index */
+}
+
+.window.minimized {
+  opacity: 0;
+  transform: scale(0.25)
+    translate(calc(100vw / 2 - 40px), calc(100vh / 2 - 40px));
+  transform-origin: bottom center;
+
+  pointer-events: none;
+}
+
+.titleBar {
+  cursor: grab;
+}
+.titleBar:active {
+  cursor: grabbing;
+}
+.window.maximized .titleBar {
+  cursor: default;
+}
+
+.resizeHandle::after {
+  content: '';
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid #aaa;
+  border-bottom: 2px solid #aaa;
+  border-radius: 0 0 4px 0;
+  pointer-events: none;
 }
 
 .titleBar {
@@ -28,7 +83,7 @@
   padding: 0 60px 0 12px;
   background: linear-gradient(#ededed, #dcdcdc);
   cursor: grab;
-  -webkit-app-region: drag; /* Electron 지원 */
+  -webkit-app-region: drag;
 }
 
 .titleBar:active {
@@ -66,6 +121,7 @@
   z-index: 10;
 }
 
+/* 좌측 컨트롤 영역 */
 .controls {
   display: flex;
   gap: 8px;
@@ -84,13 +140,13 @@
   transition: filter 0.15s;
 }
 
-.close {
+.controls .close {
   background: #ff5f56;
 }
-.minimize {
+.controls .minimize {
   background: #ffbd2e;
 }
-.maximize {
+.controls .maximize {
   background: #27c93f;
 }
 
@@ -101,7 +157,7 @@
   margin: auto;
   width: 6px;
   height: 6px;
-  opacity: 0; /* 기본은 숨김 */
+  opacity: 0;
   transition: opacity 0.15s;
   background-repeat: no-repeat;
   background-position: center;
@@ -126,7 +182,6 @@
   background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0.5' y='0.5' width='5' height='5' rx='1' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E");
 }
 
-/* 비활성화된 윈도우의 컨트롤 스타일 */
 .window.inactive .controls button {
   filter: brightness(0.9);
 }

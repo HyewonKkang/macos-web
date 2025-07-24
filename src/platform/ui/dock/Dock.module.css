@@ -1,7 +1,4 @@
 .dockBar {
-  position: fixed;
-  bottom: 14px;
-  transform: translateX(-50%);
   display: flex;
   align-items: flex-end;
   padding: 7px 13px;
@@ -13,7 +10,6 @@
     inset 0 0 0 0.5px rgba(255, 255, 255, 0.4);
   transform-origin: bottom;
   transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
-  z-index: 1000;
   perspective: 1200px;
   transform: rotateX(8deg) translateY(-2px);
 }

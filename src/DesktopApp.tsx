@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
 import { Kernel } from '@kernel';
-import { WindowManager, Dock, Desktop } from '@system';
-import DockComponent from './platform/ui/dock';
+import { Desktop, Dock, WindowManager } from '@system';
+import { AppLaunchService } from './system/appLaunchService';
+import { useEffect, useState } from 'react';
 import styles from './App.module.css';
+import DockComponent from './platform/ui/dock';
 import MenuBar from './platform/ui/menubar';
-import AppsRenderer from './platform/ui/appsRenderer';
+import WindowsRenderer from './platform/components/window/WindowsRenderer';
 
 export default function DesktopApp() {
   const [isReady, setIsReady] = useState(false);
@@ -14,6 +15,7 @@ export default function DesktopApp() {
     const windowManager = WindowManager.getInstance();
     const desktop = Desktop.getInstance();
     const dock = Dock.getInstance();
+    const appLaunchService = AppLaunchService.getInstance(); // AppLaunchService 초기화
 
     const onKernelReady = () => {
       setIsReady(true);
@@ -34,7 +36,7 @@ export default function DesktopApp() {
   return (
     <main className={styles.app}>
       <MenuBar />
-      <AppsRenderer />
+      <WindowsRenderer />
       <DockComponent />
     </main>
   );

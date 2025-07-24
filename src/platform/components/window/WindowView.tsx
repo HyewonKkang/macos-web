@@ -12,15 +12,18 @@ export default function WindowView({
   children,
 }: PropsWithChildren<Props>) {
   const wm = WindowManager.getInstance();
-  const isActive = wm.getActiveWindow()?.id === window.id;
+  const { id, isMaximized, isMinimized, title } = window;
+  const isActive = wm.getActiveWindow()?.id === id;
 
   return (
     <div
-      className={`${styles.window} ${isActive ? styles.active : styles.inactive}`}
-      onMouseDown={() => wm.focusWindow(window.id)}>
+      className={`${styles.window} ${isActive ? styles.active : styles.inactive} ${
+        isMaximized ? styles.maximized : ''
+      } ${isMinimized ? styles.minimized : ''}`}
+      onMouseDown={() => wm.focusWindow(id)}>
       <div className={styles.titleBar}>
         <WindowControls window={window} />
-        <span className={styles.title}>{window.title}</span>
+        <span className={styles.title}>{title}</span>
       </div>
 
       <div className={styles.body}>{children}</div>

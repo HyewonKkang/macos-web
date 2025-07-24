@@ -18,7 +18,11 @@ export class Desktop extends EventEmitter {
       'ready',
       this.handleDesktopReady.bind(this),
     );
-    this.kernel.ipc.subscribe('app', 'launch', this.handleAppLaunch.bind(this));
+    this.kernel.ipc.subscribe(
+      'app',
+      'launched',
+      this.handleAppLaunch.bind(this),
+    );
   }
 
   public static getInstance(): Desktop {

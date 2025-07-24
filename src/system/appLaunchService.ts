@@ -20,6 +20,9 @@ export class AppLaunchService {
       this.handleAppLaunched.bind(this),
     );
 
+    // app:focus 이벤트 구독
+    this.kernel.ipc.subscribe('app', 'focus', this.handleAppFocus.bind(this));
+
     // process 종료 이벤트 구독 (해당 앱의 모든 프로세스가 종료되면 runningApps에서 제거)
     this.kernel.processManager.on(
       'process:terminated',
@@ -69,6 +72,24 @@ export class AppLaunchService {
     );
 
     this.windowManager.focusWindow(windowId);
+  }
+
+  private handleAppFocus(data: any): void {
+    const { appId } = data.data;
+
+    const window = this.windowManager
+      .getWindows()
+      .find((window) => window.appId === appId);
+
+    if (!window) {
+      return;
+    }
+
+    if (window.isMinimized) {
+      this.windowManager.restoreWindow(window.id);
+    }
+
+    this.windowManager.focusWindow(window.id);
   }
 
   private handleProcessTerminated(data: any): void {
