@@ -1,12 +1,13 @@
 import { WindowManager } from '@system';
 import WindowView from './WindowView';
 import { useWindows } from '../../hooks/store/useWindows';
+import styles from './window.module.css';
 
 export default function WindowsRenderer() {
   const windows = useWindows();
 
   return (
-    <div>
+    <div className={styles.windowsRenderer}>
       {windows.map((window) =>
         !window.visible ? null : (
           <WindowView key={window.id} window={window}>

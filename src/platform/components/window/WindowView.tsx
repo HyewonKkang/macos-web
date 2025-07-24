@@ -3,6 +3,7 @@ import { PropsWithChildren, useRef } from 'react';
 import styles from './window.module.css';
 import WindowControls from './WindowControls';
 import useResizeWindow from '../../hooks/useResizeWindow';
+import useMoveWindow from '../../hooks/useMoveWindow';
 
 type Props = {
   window: WindowType;
@@ -19,6 +20,7 @@ export default function WindowView({
   const isActive = wm.getActiveWindow()?.id === id;
 
   const handleResizeStart = useResizeWindow(windowRef, id);
+  const handleMoveStart = useMoveWindow(windowRef, id);
 
   return (
     <div
@@ -38,7 +40,12 @@ export default function WindowView({
             }
       }
       onMouseDown={() => wm.focusWindow(id)}>
-      <div className={styles.titleBar}>
+      <div
+        className={styles.titleBar}
+        onMouseDown={(e) => {
+          wm.focusWindow(id);
+          handleMoveStart(e);
+        }}>
         <WindowControls window={window} />
         <span className={styles.title}>{title}</span>
       </div>

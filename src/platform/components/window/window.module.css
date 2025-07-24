@@ -1,3 +1,13 @@
+:root {
+  --menu-bar-height: 24px;
+  --dock-height: 84px;
+}
+
+.windowsRenderer {
+  position: relative;
+  z-index: 100;
+}
+
 .window {
   position: absolute;
   background: #fafafa;
@@ -26,11 +36,6 @@
 }
 .window.inactive {
   opacity: 0.95;
-}
-
-:root {
-  --menu-bar-height: 24px;
-  --dock-height: 84px;
 }
 
 .window.maximized {
