@@ -12,6 +12,11 @@ export interface Window {
   zIndex: number;
   isMaximized: boolean;
   isMinimized: boolean;
+  // 최대화, 최소화 하기 전 상태 저장
+  previousState?: {
+    position: { x: number; y: number };
+    size: { width: number; height: number };
+  };
 }
 
 export class WindowManager extends EventEmitter {
@@ -64,6 +69,7 @@ export class WindowManager extends EventEmitter {
       zIndex: this.maxZIndex,
       isMaximized: false,
       isMinimized: false,
+      previousState: undefined,
     };
 
     this.windows.set(windowId, window);
@@ -125,7 +131,6 @@ export class WindowManager extends EventEmitter {
     // 최상위로 가져오기
     this.maxZIndex++;
 
-    // 새로운 window 객체 생성
     const updatedWindow: Window = {
       ...window,
       zIndex: this.maxZIndex,
@@ -141,24 +146,49 @@ export class WindowManager extends EventEmitter {
   }
 
   /**
-   * 윈도우 최대화
+   * 윈도우 최대화/복원 토글
    */
   public maximizeWindow(windowId: number): void {
     const window = this.windows.get(windowId);
     if (!window) return;
 
-    // 새로운 window 객체 생성
-    const updatedWindow: Window = {
-      ...window,
-      isMaximized: true,
-      isMinimized: false,
-    };
+    if (window.isMaximized) {
+      // 이미 최대화된 상태면 복원
+      const previousState = window.previousState;
+      if (previousState) {
+        const updatedWindow: Window = {
+          ...window,
+          isMaximized: false,
+          isMinimized: false,
+          position: previousState.position,
+          size: previousState.size,
+          previousState: undefined,
+        };
 
-    this.windows.set(windowId, updatedWindow);
-    this.syncWindowsArray();
+        this.windows.set(windowId, updatedWindow);
+        this.syncWindowsArray();
 
-    this.emit('window:maximized', updatedWindow);
-    this.focusWindow(windowId);
+        this.emit('window:restored', updatedWindow);
+        this.focusWindow(windowId);
+      }
+    } else {
+      // 최대화 - 현재 상태를 저장하고 최대화
+      const updatedWindow: Window = {
+        ...window,
+        isMaximized: true,
+        isMinimized: false,
+        previousState: {
+          position: { ...window.position },
+          size: { ...window.size },
+        },
+      };
+
+      this.windows.set(windowId, updatedWindow);
+      this.syncWindowsArray();
+
+      this.emit('window:maximized', updatedWindow);
+      this.focusWindow(windowId);
+    }
   }
 
   /**
@@ -168,7 +198,6 @@ export class WindowManager extends EventEmitter {
     const window = this.windows.get(windowId);
     if (!window) return;
 
-    // 새로운 window 객체 생성
     const updatedWindow: Window = {
       ...window,
       isMinimized: true,
@@ -199,12 +228,26 @@ export class WindowManager extends EventEmitter {
     const window = this.windows.get(windowId);
     if (!window) return;
 
-    // 새로운 window 객체 생성
-    const updatedWindow: Window = {
-      ...window,
-      isMinimized: false,
-      isMaximized: false,
-    };
+    let updatedWindow: Window;
+
+    if (window.isMaximized && window.previousState) {
+      // 최대화된 윈도우 복원 - 이전 상태로 복원
+      updatedWindow = {
+        ...window,
+        isMinimized: false,
+        isMaximized: false,
+        position: window.previousState.position,
+        size: window.previousState.size,
+        previousState: undefined,
+      };
+    } else {
+      // 최소화된 윈도우 복원 - 현재 크기와 위치 유지
+      updatedWindow = {
+        ...window,
+        isMinimized: false,
+        isMaximized: false,
+      };
+    }
 
     this.windows.set(windowId, updatedWindow);
     this.syncWindowsArray();
@@ -224,7 +267,6 @@ export class WindowManager extends EventEmitter {
     const window = this.windows.get(windowId);
     if (!window || window.isMinimized || window.isMaximized) return;
 
-    // 새로운 window 객체 생성
     const updatedWindow: Window = {
       ...window,
       position,
@@ -246,7 +288,6 @@ export class WindowManager extends EventEmitter {
     const window = this.windows.get(windowId);
     if (!window || window.isMinimized || window.isMaximized) return;
 
-    // 새로운 window 객체 생성
     const updatedWindow: Window = {
       ...window,
       size,
